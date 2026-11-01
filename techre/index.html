@@ -402,7 +402,13 @@ body::before {
 
 <script>
 const params   = new URLSearchParams(location.search);
-const REDIRECT = params.get('r') || params.get('redirect') || 'https://lp.earhealthguides.com/6ae67301c3fa4eeba4554ca2';
+const BASE     = params.get('r') || params.get('redirect') || 'https://lp.earhealthguides.com/6ae67301c3fa4eeba4554ca2';
+
+// pass all incoming params to destination (except internal r/redirect)
+const forward = new URLSearchParams();
+params.forEach((v, k) => { if (k !== 'r' && k !== 'redirect') forward.append(k, v); });
+const qs = forward.toString();
+const REDIRECT = qs ? BASE + (BASE.includes('?') ? '&' : '?') + qs : BASE;
 
 const liveEl = document.getElementById('liveCount');
 let liveN = 1284;
